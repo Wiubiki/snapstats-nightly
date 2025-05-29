@@ -1,0 +1,5 @@
+.court-zone:hover {
+  cursor: pointer;
+  fill: rgba(0, 123, 255, 0.3);
+  transition: 0.2s ease;
+}

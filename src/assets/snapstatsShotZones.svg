@@ -1,0 +1,43 @@
+# Define a palette of tints to assign to each zone for visual differentiation
+zone_colors = {
+    "side_3_left": "rgba(255,0,0,0.15)",
+    "wing_3_left": "rgba(255,165,0,0.15)",
+    "top_key_3": "rgba(255,255,0,0.15)",
+    "wing_3_right": "rgba(0,128,0,0.15)",
+    "side_3_right": "rgba(0,255,255,0.15)",
+    "corner_2_left": "rgba(0,0,255,0.15)",
+    "wing_2_left": "rgba(128,0,128,0.15)",
+    "top_key_2": "rgba(255,192,203,0.15)",
+    "wing_2_right": "rgba(160,82,45,0.15)",
+    "corner_2_right": "rgba(128,128,128,0.15)",
+    "paint": "rgba(255,0,255,0.15)"
+}
+
+# Create base SVG again
+svg_colored = ET.Element('svg', {
+    'width': str(500),
+    'height': str(H),
+    'viewBox': f"0 0 500 {H}",
+    'xmlns': "http://www.w3.org/2000/svg",
+    'style': "background-color:#f9f9f9"
+})
+
+# Redefine zones with specific tints
+add_zone(svg_colored, [(0, H), (30, H), (30, H-140), (0, H-140)], "side_3_left", zone_colors["side_3_left"])
+add_zone(svg_colored, wing3_arc + [(170, 0), (0, 0), (0, H-140)], "wing_3_left", zone_colors["wing_3_left"])
+add_zone(svg_colored, top_key3_arc + [(330, 0), (170, 0)], "top_key_3", zone_colors["top_key_3"])
+add_zone(svg_colored, [(330, H-276.12)] + wing3r_arc + [(500, H-140), (500, 0), (330, 0)], "wing_3_right", zone_colors["wing_3_right"])
+add_zone(svg_colored, [(470, H), (500, H), (500, H-140), (470, H-140)], "side_3_right", zone_colors["side_3_right"])
+add_zone(svg_colored, [(30, H), (170, H), (170, H-140), (30, H-140)], "corner_2_left", zone_colors["corner_2_left"])
+add_zone(svg_colored, [(30, H-140), (170, H-140)] + wing2l_arc, "wing_2_left", zone_colors["wing_2_left"])
+add_zone(svg_colored, [(170, H-190), (170, H-276.12)] + top_key2_arc + [(330, H-276.12), (330, H-190)], "top_key_2", zone_colors["top_key_2"])
+add_zone(svg_colored, [(330, H-140), (470, H-140)] + wing2r_arc, "wing_2_right", zone_colors["wing_2_right"])
+add_zone(svg_colored, [(330, H), (470, H), (470, H-140), (330, H-140)], "corner_2_right", zone_colors["corner_2_right"])
+add_zone(svg_colored, [(170, H), (330, H), (330, H-190), (170, H-190)], "paint", zone_colors["paint"])
+
+# Export the colored SVG
+colored_svg_path = "/mnt/data/snapstats_full_shot_zones_colored.svg"
+with open(colored_svg_path, "w") as f:
+    f.write(parseString(ET.tostring(svg_colored)).toprettyxml())
+
+colored_svg_path
