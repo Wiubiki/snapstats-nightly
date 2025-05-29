@@ -1,0 +1,24 @@
+.player-grid {
+  margin-bottom: 1rem;
+}
+
+.player-grid-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.player-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-weight: bold;
+  border: 2px solid;
+  background-color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.player-btn.selected {
+  transform: scale(1.1);
+}
