@@ -1,0 +1,22 @@
+.stat-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  justify-content: center;
+}
+
+.stat-btn {
+  padding: 0.6rem 1rem;
+  border: 2px solid #333;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: white;
+  transition: all 0.2s ease;
+}
+
+.stat-btn.selected {
+  background-color: #333;
+  color: white;
+}
