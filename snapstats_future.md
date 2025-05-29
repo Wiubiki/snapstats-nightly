@@ -119,6 +119,38 @@ We currently log Personal Fouls (PF) as committed events. But fouls drawn are ju
 
 ---
 
+## 🔹 Free Tap Court Input (Hybrid Mode)
+
+**Concept:** Replace fixed zone selection with a free-tap interface on the court map.
+
+**Proposed Flow:**
+
+1. User taps player
+2. User taps any location on the court
+3. App uses predefined polygon zones (3PT, 2PT, paint) to infer:
+
+   * Shot type (2PT or 3PT)
+   * Optional: additional shot detail (layup, floater, etc. if in paint)
+4. Log includes both inferred `zoneId` and exact `(x, y)` coordinates
+
+**Advantages:**
+
+* Streamlined stat input
+* Enables precise shot charting
+* Flexible, allows later heatmaps and data science use
+
+**Implementation:**
+
+* Reuse existing court SVG with invisible logic zones
+* Use point-in-polygon logic to assign shot type
+* Optional modal for paint shot type tagging
+
+**V1.0 Status:** Not implemented.
+
+* For now, only small changes are allowed to accommodate this in future (e.g., logging x/y alongside zone).
+
+---
+
 ## 🌐 Event Log Navigation UI
 
 **Idea:** A right or left drawer that can be tapped open to display:
