@@ -39,6 +39,16 @@ function App() {
   const getFoulsForTeam = (team) => {
     return eventLog.filter((e) => e.team === team && e.statType === "PF").length;
   };
+
+  // Function to handle undo events
+  const handleUndo = () => {
+    if (eventLog.length === 0) return;
+  
+    const updatedLog = [...eventLog.slice(0, -1)];
+    setEventLog(updatedLog);
+    localStorage.setItem("snapstats_eventLog", JSON.stringify(updatedLog));
+  };
+  
   
 
   //Define stat logger function
@@ -182,7 +192,7 @@ return (
         </ul>
       </div>
 
-      {/* Button for changing quarter and reseting game */}
+      {/* Button for changing quarter, undo action and  reseting game */}
 
       <button
         onClick={() => setQuarter((prev) => Math.min(prev + 1, 4))}
@@ -218,6 +228,23 @@ return (
       >
         Reset Game
       </button>
+
+      <button
+        onClick={handleUndo}
+        style={{
+          marginTop: "1rem",
+          marginRight: "0.5rem",
+          padding: "0.5rem 1rem",
+          backgroundColor: "#6c757d",
+          color: "white",
+          border: "none",
+          borderRadius: "4px",
+          cursor: "pointer"
+        }}
+      >
+        Undo Last
+      </button>
+      
       
     </div>
   );
