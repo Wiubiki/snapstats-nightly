@@ -10,7 +10,7 @@ function App() {
   const [teamConfig, setTeamConfig] = useState({
     home: {
       name: "Home",
-      color: "#007bff",
+      color: "#18bd0d",
       players: Array.from({ length: 12 }, (_, i) => i + 4)
     },
     away: {
