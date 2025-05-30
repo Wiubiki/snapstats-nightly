@@ -22,6 +22,24 @@ function App() {
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [selectedStat, setSelectedStat] = useState(null);
   const [eventLog, setEventLog] = useState([]);
+  const [quarter, setQuarter] = useState(1);
+
+  // Helper functions for team score + fouls
+  const getScoreForTeam = (team) => {
+    return eventLog.reduce((sum, e) => {
+      if (e.team === team && e.made) {
+        if (e.statType === "3PT") return sum + 3;
+        if (e.statType === "2PT") return sum + 2;
+        if (e.statType === "FT") return sum + 1;
+      }
+      return sum;
+    }, 0);
+  };
+  
+  const getFoulsForTeam = (team) => {
+    return eventLog.filter((e) => e.team === team && e.statType === "PF").length;
+  };
+  
 
   //Define stat logger function
   const logStatEvent = ({ zoneId = null, made = null, statOverride = null  }) => {
@@ -76,6 +94,28 @@ function App() {
 
 return (
     <div className="App" style={{ padding: "1rem" }}>
+	  <div
+	    style={{
+	      display: "flex",
+	      justifyContent: "space-between",
+	      alignItems: "center",
+	      background: "#f0f0f0",
+	      padding: "0.5rem 1rem",
+	      borderRadius: "6px",
+	      marginBottom: "1rem"
+	    }}
+	  >
+	    <div style={{ color: teamConfig.home.color, fontWeight: "bold" }}>
+	      {teamConfig.home.name} | Score: {getScoreForTeam("home")} | Fouls: {getFoulsForTeam("home")}
+	    </div>
+	  
+	    <div style={{ fontWeight: "bold" }}>Quarter: {quarter}</div>
+	  
+	    <div style={{ color: teamConfig.away.color, fontWeight: "bold" }}>
+	      {teamConfig.away.name} | Score: {getScoreForTeam("away")} | Fouls: {getFoulsForTeam("away")}
+	    </div>
+	  </div>
+	  
       <h2>SnapStats Court</h2>
   
       <InteractiveCourt onZoneClick={handleZoneClick} />
@@ -141,6 +181,24 @@ return (
           ))}
         </ul>
       </div>
+
+      {/* Button for changing quarter and reseting game */}
+
+      <button
+        onClick={() => setQuarter((prev) => Math.min(prev + 1, 4))}
+        style={{
+          padding: "0.5rem 1rem",
+          marginBottom: "1rem",
+          backgroundColor: "#007bff",
+          color: "white",
+          border: "none",
+          borderRadius: "4px",
+          cursor: "pointer"
+        }}
+      >
+        Next Quarter
+      </button>
+      
       <button
         onClick={() => {
           if (window.confirm("Reset all logged events?")) {
