@@ -8,25 +8,38 @@ const PlayerGrid = ({ team, config, selectedPlayer, onSelect }) => {
     <div className="player-grid">
       <h4 style={{ color }}>{config.name || team}</h4>
       <div className="player-grid-buttons">
-        {players.map((number) => {
+        {players.map((number, index) => {
           const isSelected =
             selectedPlayer &&
             selectedPlayer.playerId === number &&
             selectedPlayer.team === team;
-
+        
           return (
-            <button
-              key={number}
-              className={`player-btn ${isSelected ? "selected" : ""}`}
-              style={{
-                borderColor: color,
-                backgroundColor: isSelected ? color : "white",
-                color: isSelected ? "white" : color,
-              }}
-              onClick={() => onSelect({ team, playerId: number })}
-            >
-              {number}
-            </button>
+            <div key={index} className="player-edit-wrapper">
+              <input
+                type="number"
+                value={number}
+                min="0"
+                max="99"
+                onChange={(e) => {
+                  const updated = [...players];
+                  updated[index] = parseInt(e.target.value, 10) || 0;
+                  onEdit(updated); // new prop we'll add
+                }}
+                className="jersey-input"
+              />
+              <button
+                className={`player-btn ${isSelected ? "selected" : ""}`}
+                style={{
+                  borderColor: color,
+                  backgroundColor: isSelected ? color : "white",
+                  color: isSelected ? "white" : color,
+                }}
+                onClick={() => onSelect({ team, playerId: number })}
+              >
+                {number}
+              </button>
+            </div>
           );
         })}
       </div>

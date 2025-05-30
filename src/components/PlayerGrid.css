@@ -22,3 +22,17 @@
 .player-btn.selected {
   transform: scale(1.1);
 }
+
+.player-edit-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.jersey-input {
+  width: 40px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
