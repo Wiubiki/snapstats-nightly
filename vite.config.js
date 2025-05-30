@@ -1,7 +1,10 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
-// https://vite.dev/config/
+// Replace this with your actual repo name
+const repoName = 'snapstats';
+
 export default defineConfig({
   plugins: [react()],
-})
+  base: `/${repoName}/`,
+});
