@@ -213,6 +213,26 @@ We currently log Personal Fouls (PF) as committed events. But fouls drawn are ju
 
 ---
 
+## 🎙 Voice Dictation (Experimental)
+
+**Concept:**
+
+* Allow logging events using browser voice recognition APIs
+* Example command: "#7 rebound" or "#12 three point made"
+
+**Use Case:**
+
+* Truly hands-free logging during live games
+
+**Challenges:**
+
+* Noise during games
+* Training the model to understand stat phrases reliably
+
+**Status:**  Deferred — worth prototyping post-V1.0 as an accessibility + power-user feature
+
+---
+
 ## 🔄 General Plan
 
 > **SnapStats will ship V1.0 with single-actor, single-action stat logging.**
