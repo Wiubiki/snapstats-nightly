@@ -1,7 +1,7 @@
 import React from "react";
 import "./PlayerGrid.css"; // optional, or inline styles
 
-const PlayerGrid = ({ team, config, selectedPlayer, onSelect }) => {
+const PlayerGrid = ({ team, config, selectedPlayer, onSelect, onEdit }) => {
   const { players, color } = config;
 
   return (
