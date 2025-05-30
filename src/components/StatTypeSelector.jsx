@@ -2,16 +2,16 @@ import React from "react";
 import "./StatTypeSelector.css"; // optional for styling
 
 const STAT_TYPES = [
-  { type: "2PT", label: "2PT" },
-  { type: "3PT", label: "3PT" },
   { type: "FT", label: "FT" },
-  { type: "REB", label: "REB" },
+  { type: "ORB", label: "ORB" },
+  { type: "DRB", label: "DRB" },
   { type: "AST", label: "AST" },
   { type: "STL", label: "STL" },
   { type: "TO", label: "TO" },
   { type: "BLK", label: "BLK" },
   { type: "PF", label: "PF" }
 ];
+
 
 const StatTypeSelector = ({ selectedStat, onSelect }) => {
   return (

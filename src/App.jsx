@@ -49,12 +49,13 @@ function App() {
   
   //Handle Court Taps for Shot Stats
   const handleZoneClick = (zoneId) => {
-    if (!selectedStat || !selectedPlayer) return;
+    if (!selectedPlayer) return;
   
-    if (selectedStat === "2PT" || selectedStat === "3PT") {
-      const made = window.confirm("Shot made? OK = Yes, Cancel = No");
-      logStatEvent({ zoneId, made });
-    }
+    const shotType = zoneId.includes("3") ? "3PT" : "2PT";
+    const made = window.confirm(`${shotType} attempt — made? OK = Yes, Cancel = No`);
+  
+    setSelectedStat(shotType); // for completeness if you want to display it
+    logStatEvent({ zoneId, made });
   };
   
 
@@ -83,11 +84,21 @@ return (
         selectedStat={selectedStat}
         onSelect={(statType) => {
           setSelectedStat(statType);
-          if (statType !== "2PT" && statType !== "3PT" && selectedPlayer) {
+      
+          if (statType === "FT" && selectedPlayer) {
+            const made = window.confirm("Free throw made? OK = Yes, Cancel = No");
+            logStatEvent({ made });
+          }
+      
+          if (
+            !["FT", "2PT", "3PT"].includes(statType) &&
+            selectedPlayer
+          ) {
             logStatEvent({});
           }
         }}
       />
+      
   
       {/* 🧪 Event Log */}
       <div style={{ marginTop: "1rem" }}>
