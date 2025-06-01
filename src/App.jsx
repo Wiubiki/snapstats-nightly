@@ -144,7 +144,41 @@ return (
 
       <InteractiveCourt onZoneClick={handleZoneClick} />
       </div>
+
+      {/* Stat Selector Grid */}	
+      <div
+        style={{
+          
+          justifyContent: "space-between",
+          marginTop: "0.5rem",
+          width: "100%"
+        }}
+      >
+      <StatTypeSelector
+              selectedStat={selectedStat}
+              onSelect={(statType) => {
+                setSelectedStat(statType);
+            
+                if (statType === "FT" && selectedPlayer) {
+                  const made = window.confirm("Free throw made? OK = Yes, Cancel = No");
+                  logStatEvent({ made, statOverride: "FT" }); // pass it manually
+                }
+            
+                if (
+                  !["FT", "2PT", "3PT"].includes(statType) &&
+                  selectedPlayer
+                ) {
+                  logStatEvent({ statOverride: statType });
+                }
+              }}
+            />
+
+      
+
+      </div>
+      
   
+	  {/* Home + Away PlayerGrids */}	
 	  <div
 	    style={{
 	      display: "flex",
@@ -153,8 +187,8 @@ return (
 	      width: "100%"
 	    }}
 	  >
-	  {/* Home + Away PlayerGrids */}
-	  <div style={{ width: "66.66%" }}>
+	  
+	  <div style={{ width: "50%" }}>
       <PlayerGrid
         team="home"
         config={teamConfig.home}
@@ -167,7 +201,9 @@ return (
           }))
         }
       />
-      
+      </div>
+
+      <div style={{ width: "50%" }}>
       <PlayerGrid
         team="away"
         config={teamConfig.away}
@@ -182,46 +218,11 @@ return (
       />
       </div>
   
-      {/* 🧮 Stat Type Selector */}
-      <div style={{ width: "33.33%" }}>
-      <StatTypeSelector
-        selectedStat={selectedStat}
-        onSelect={(statType) => {
-          setSelectedStat(statType);
-      
-          if (statType === "FT" && selectedPlayer) {
-            const made = window.confirm("Free throw made? OK = Yes, Cancel = No");
-            logStatEvent({ made, statOverride: "FT" }); // pass it manually
-          }
-      
-          if (
-            !["FT", "2PT", "3PT"].includes(statType) &&
-            selectedPlayer
-          ) {
-            logStatEvent({ statOverride: statType });
-          }
-        }}
-      />
-      </div>
+
       </div>
 
       {/* Button for changing quarter, undo action and  reseting game */}
-
-      <button
-        onClick={() => setQuarter((prev) => Math.min(prev + 1, 4))}
-        style={{
-          padding: "0.5rem 1rem",
-          marginBottom: "1rem",
-          backgroundColor: "#007bff",
-          color: "white",
-          border: "none",
-          borderRadius: "4px",
-          cursor: "pointer"
-        }}
-      >
-        Next Quarter
-      </button>
-      
+     
       <button
         onClick={() => {
           if (window.confirm("Reset all logged events?")) {

@@ -6,7 +6,7 @@ const PlayerGrid = ({ team, config, selectedPlayer, onSelect, onEdit }) => {
 
   return (
     <div className="player-grid">
-      <h4 style={{ color }}>{config.name || team}</h4>
+      {/* Comment out team headings <h4 style={{ color }}>{config.name || team}</h4> */}
       <div className="player-grid-buttons">
         {players.map((number, index) => {
           const isSelected =

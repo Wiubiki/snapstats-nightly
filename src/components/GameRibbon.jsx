@@ -33,6 +33,8 @@ export default function GameRibbon({
       style={{
         position: "absolute",
         top: 0,
+        left: "50%",
+        transform: "translateX(-50%)",
         width: "90%",
         background: "#ffffff", // solid white
         display: "flex",

@@ -1,20 +1,25 @@
 .stat-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1rem;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  margin-top: 0.5rem;
+  padding: 0 0px;
 }
 
+
 .stat-btn {
-  padding: 0.6rem 1rem;
+  padding: 6px 4px;
+  font-size: 13px;
   border: 2px solid #333;
-  border-radius: 6px;
+  border-radius: 5px;
   font-weight: bold;
-  cursor: pointer;
   background-color: white;
+  cursor: pointer;
   transition: all 0.2s ease;
+  text-align: center;
+  height: 36px;
 }
+
 
 .stat-btn.selected {
   background-color: #333;
