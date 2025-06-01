@@ -105,7 +105,8 @@ function App() {
   
 
 return (
-    <div className="App" style={{ padding: "1rem" }}>
+    <div className="App" style={{ padding: "1rem", maxWidth:"100vw", overflowX:"hidden", margin: "0 auto" }}>
+    <div className="GameRibbon" style={{ width: "100%",  maxWidth:"100vw", height: "auto"  }}>
 	  <GameRibbon
 	    homeScore={getScoreForTeam("home")}
 	    awayScore={getScoreForTeam("away")}
@@ -113,25 +114,47 @@ return (
 	    awayFouls={getFoulsForTeam("away")}
 	    quarter={quarter}
 	    onQuarterChange={(delta) => {
-	      setQuarter((prev) => Math.max(1, Math.min(prev + delta, 4)));
+	      setQuarter((prev) => {
+	        const next = Math.max(1, Math.min(prev + delta, 4));
+	        if (next !== prev) {
+	          // Reset foul-related events only (optional enhancement)
+	          setEventLog((prevLog) =>
+	            prevLog.filter((e) => e.statType !== "PF")
+	          );
+	          localStorage.setItem(
+	            "snapstats_eventLog",
+	            JSON.stringify(
+	              eventLog.filter((e) => e.statType !== "PF")
+	            )
+	          );
+	        }
+	        return next;
+	      });
 	    }}
+	    
 	  />
-	  
-	  
-      <h2>SnapStats Court</h2>
-  
-      <GameRibbon
-        homeScore={getScoreForTeam("home")}
-        awayScore={getScoreForTeam("away")}
-        homeFouls={getFoulsForTeam("home")}
-        awayFouls={getFoulsForTeam("away")}
-        quarter={quarter}
-        onQuarterChange={(delta) => {
-          setQuarter((prev) => Math.max(1, Math.min(prev + delta, 4)));
-        }}
-      />
+	  </div>
+
+	  <div className="court-wrapper" style={{ 
+	  									width: "100vw",  
+	  									maxWidth:"100%", 
+	  									height: "auto", 
+	  									position:"relative", 
+	  									overflow: "hidden"  }}>
+
       <InteractiveCourt onZoneClick={handleZoneClick} />
+      </div>
   
+	  <div
+	    style={{
+	      display: "flex",
+	      justifyContent: "space-between",
+	      marginTop: "1rem",
+	      width: "100%"
+	    }}
+	  >
+	  {/* Home + Away PlayerGrids */}
+	  <div style={{ width: "66.66%" }}>
       <PlayerGrid
         team="home"
         config={teamConfig.home}
@@ -157,9 +180,10 @@ return (
           }))
         }
       />
-      
+      </div>
   
       {/* 🧮 Stat Type Selector */}
+      <div style={{ width: "33.33%" }}>
       <StatTypeSelector
         selectedStat={selectedStat}
         onSelect={(statType) => {
@@ -178,20 +202,7 @@ return (
           }
         }}
       />
-      
-  
-      {/* 🧪 Event Log */}
-      <div style={{ marginTop: "1rem" }}>
-        <h4>Event Log:</h4>
-        <ul>
-          {eventLog.map((event, index) => (
-            <li key={index}>
-              #{event.playerId} | {event.statType}{" "}
-              {event.zoneId ? `@ ${event.zoneId}` : ""}{" "}
-              {event.made !== null ? (event.made ? "✅" : "❌") : ""}
-            </li>
-          ))}
-        </ul>
+      </div>
       </div>
 
       {/* Button for changing quarter, undo action and  reseting game */}
@@ -246,6 +257,22 @@ return (
       >
         Undo Last
       </button>
+  
+      {/* 🧪 Event Log */}
+      <div style={{ marginTop: "1rem" }}>
+        <h4>Event Log:</h4>
+        <ul>
+          {eventLog.map((event, index) => (
+            <li key={index}>
+              #{event.playerId} | {event.statType}{" "}
+              {event.zoneId ? `@ ${event.zoneId}` : ""}{" "}
+              {event.made !== null ? (event.made ? "✅" : "❌") : ""}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      
       
       
     </div>

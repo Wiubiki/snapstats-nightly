@@ -33,31 +33,34 @@ export default function GameRibbon({
       style={{
         position: "absolute",
         top: 0,
-        width: "100%",
-        background: "#ffffffcc",
+        width: "90%",
+        background: "#ffffff", // solid white
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "6px 8px",
+        padding: "12px 8px",
         zIndex: 999,
         fontSize: "14px"
       }}
     >
       {/* Home */}
-      <div style={{ textAlign: "left", color: "#007b00" }}>
+      <div style={{ textAlign: "left", fontSize:"18px", color: "#007b00" }}>
         <div style={{ fontWeight: "bold" }}>{homeScore}</div>
         <FoulBoxes count={homeFouls} />
       </div>
 
       {/* Quarter + Controls */}
-      <div style={{ textAlign: "center", fontWeight: "bold" }}>
-        <button onClick={() => onQuarterChange(-1)}>&lt;</button>
-        &nbsp;Q{quarter}&nbsp;
-        <button onClick={() => onQuarterChange(1)}>&gt;</button>
+      <div style={{ fontWeight: "bold", textAlign: "center" }}>
+        <div style={{ fontSize: "16px" }}>Q{quarter}</div>
+        <div>
+          <button onClick={() => onQuarterChange(-1)}>&lt;</button>
+          <button onClick={() => onQuarterChange(1)}>&gt;</button>
+        </div>
       </div>
+      
 
       {/* Away + Menu */}
-      <div style={{ textAlign: "right", color: "#cc0000" }}>
+      <div style={{ textAlign: "right", fontSize:"18px", color: "#cc0000" }}>
         <div style={{ fontWeight: "bold" }}>{awayScore}</div>
         <FoulBoxes count={awayFouls} />
       </div>
