@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import InteractiveCourt from "./components/InteractiveCourt";
 import PlayerGrid from "./components/PlayerGrid";
 import StatTypeSelector from "./components/StatTypeSelector";
+import GameRibbon from "./components/GameRibbon";
+
 
 
 
@@ -104,30 +106,30 @@ function App() {
 
 return (
     <div className="App" style={{ padding: "1rem" }}>
-	  <div
-	    style={{
-	      display: "flex",
-	      justifyContent: "space-between",
-	      alignItems: "center",
-	      background: "#f0f0f0",
-	      padding: "0.5rem 1rem",
-	      borderRadius: "6px",
-	      marginBottom: "1rem"
+	  <GameRibbon
+	    homeScore={getScoreForTeam("home")}
+	    awayScore={getScoreForTeam("away")}
+	    homeFouls={getFoulsForTeam("home")}
+	    awayFouls={getFoulsForTeam("away")}
+	    quarter={quarter}
+	    onQuarterChange={(delta) => {
+	      setQuarter((prev) => Math.max(1, Math.min(prev + delta, 4)));
 	    }}
-	  >
-	    <div style={{ color: teamConfig.home.color, fontWeight: "bold" }}>
-	      {teamConfig.home.name} | Score: {getScoreForTeam("home")} | Fouls: {getFoulsForTeam("home")}
-	    </div>
+	  />
 	  
-	    <div style={{ fontWeight: "bold" }}>Quarter: {quarter}</div>
-	  
-	    <div style={{ color: teamConfig.away.color, fontWeight: "bold" }}>
-	      {teamConfig.away.name} | Score: {getScoreForTeam("away")} | Fouls: {getFoulsForTeam("away")}
-	    </div>
-	  </div>
 	  
       <h2>SnapStats Court</h2>
   
+      <GameRibbon
+        homeScore={getScoreForTeam("home")}
+        awayScore={getScoreForTeam("away")}
+        homeFouls={getFoulsForTeam("home")}
+        awayFouls={getFoulsForTeam("away")}
+        quarter={quarter}
+        onQuarterChange={(delta) => {
+          setQuarter((prev) => Math.max(1, Math.min(prev + delta, 4)));
+        }}
+      />
       <InteractiveCourt onZoneClick={handleZoneClick} />
   
       <PlayerGrid
