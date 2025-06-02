@@ -3,6 +3,8 @@ import InteractiveCourt from "./components/InteractiveCourt";
 import PlayerGrid from "./components/PlayerGrid";
 import StatTypeSelector from "./components/StatTypeSelector";
 import GameRibbon from "./components/GameRibbon";
+import ShotResultModal from "./components/ShotResultModal.jsx";
+
 
 
 
@@ -50,6 +52,11 @@ function App() {
     setEventLog(updatedLog);
     localStorage.setItem("snapstats_eventLog", JSON.stringify(updatedLog));
   };
+
+  // Shot Result Modal
+  const [showModal, setShowModal] = useState(false);
+  const [pendingZone, setPendingZone] = useState(null);
+  
   
   
 
@@ -84,12 +91,16 @@ function App() {
   
   //Handle Court Taps for Shot Stats
   const handleZoneClick = (zoneId) => {
-    if (!selectedPlayer) return;
-  
+    if (selectedPlayer) {
+      setPendingZone(zoneId);
+      setShowModal(true);
+    }
+    
+  /*  Old confirm.window logic for logging miss/made for shots
     const shotType = zoneId.includes("3") ? "3PT" : "2PT";
     const made = window.confirm(`${shotType} attempt — made? OK = Yes, Cancel = No`);
   
-    logStatEvent({ zoneId, made, statOverride: shotType });
+    logStatEvent({ zoneId, made, statOverride: shotType }); */
   };
   
 
@@ -160,9 +171,11 @@ return (
                 setSelectedStat(statType);
             
                 if (statType === "FT" && selectedPlayer) {
-                  const made = window.confirm("Free throw made? OK = Yes, Cancel = No");
-                  logStatEvent({ made, statOverride: "FT" }); // pass it manually
+                  setPendingZone(null);
+                  setSelectedStat("FT");
+                  setShowModal(true);
                 }
+                
             
                 if (
                   !["FT", "2PT", "3PT"].includes(statType) &&
@@ -220,6 +233,32 @@ return (
   
 
       </div>
+
+      {/* Stat Result Modal */}
+      {showModal && (
+        <ShotResultModal
+          onSelect={(made) => {
+            const shotType =
+              selectedStat === "FT" ? "FT" :
+              pendingZone?.includes("3") ? "3PT" : "2PT";
+        
+            logStatEvent({
+              zoneId: pendingZone, // null for FT
+              made,
+              statOverride: shotType
+            });
+        
+            setShowModal(false);
+            setPendingZone(null);
+          }}
+          onCancel={() => {
+              setShowModal(false);
+              setPendingZone(null);
+              setSelectedStat(null); // ⬅️ this clears FT lock
+            }}
+        />
+        
+      )}
 
       {/* Button for changing quarter, undo action and  reseting game */}
      
