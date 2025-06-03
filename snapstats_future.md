@@ -12,8 +12,6 @@ This document captures ideas, observations, and potential features for future ve
 * Fouls (committed and drawn)
 * Steals
 * Rebounds (Off/Def)
-* Deflections
-* Hustle Plays (future custom tags)
 
 **Vision:**
 These events occur in identifiable zones on the court and could be optionally tagged with a location, just like shots. This would enable:
@@ -21,7 +19,6 @@ These events occur in identifiable zones on the court and could be optionally ta
 * Defensive heatmaps
 * Rebound zones
 * Foul clustering
-* Custom effort-based analytics
 
 **Implementation:**
 
@@ -34,7 +31,7 @@ These events occur in identifiable zones on the court and could be optionally ta
 * Consider distinguishing stats as:
 
   * **Count Stats**: Simple, no court interaction (e.g., AST, FT, TO)
-  * **Court Stats**: Involve zone placement (e.g., 2PT, 3PT, BLK, REB, PF, STL, DEFLECT)
+  * **Court Stats**: Involve zone placement (e.g., 2PT, 3PT, BLK, REB, PF)
 * These terms can guide both UI flow and code structure.
 
 **Status:** Deferred until post-V1.0.
@@ -96,61 +93,6 @@ We currently log Personal Fouls (PF) as committed events. But fouls drawn are ju
 
 ---
 
-## 🔢 Shot Context: Contested Metrics
-
-**Concept:** Add qualitative data to shot attempts:
-
-* Open
-* Lightly Contested
-* Moderately Contested
-* Heavily Contested
-
-**Extended Feature:**
-
-* Optional tagging of defender (`contestedBy: playerId`) to credit good defensive plays
-
-**Implementation Idea:**
-
-* Step after shot zone is tapped and made/miss is selected
-* Add selection interface (buttons or color-coded levels)
-* Store in event: `{ contestLevel: 'moderate', contestedBy: optional }`
-
-**Status:** Deferred for enhanced shot logging flow (V2+)
-
----
-
-## 🔹 Free Tap Court Input (Hybrid Mode)
-
-**Concept:** Replace fixed zone selection with a free-tap interface on the court map.
-
-**Proposed Flow:**
-
-1. User taps player
-2. User taps any location on the court
-3. App uses predefined polygon zones (3PT, 2PT, paint) to infer:
-
-   * Shot type (2PT or 3PT)
-   * Optional: additional shot detail (layup, floater, etc. if in paint)
-4. Log includes both inferred `zoneId` and exact `(x, y)` coordinates
-
-**Advantages:**
-
-* Streamlined stat input
-* Enables precise shot charting
-* Flexible, allows later heatmaps and data science use
-
-**Implementation:**
-
-* Reuse existing court SVG with invisible logic zones
-* Use point-in-polygon logic to assign shot type
-* Optional modal for paint shot type tagging
-
-**V1.0 Status:** Not implemented.
-
-* For now, only small changes are allowed to accommodate this in future (e.g., logging x/y alongside zone).
-
----
-
 ## 🌐 Event Log Navigation UI
 
 **Idea:** A right or left drawer that can be tapped open to display:
@@ -173,7 +115,7 @@ We currently log Personal Fouls (PF) as committed events. But fouls drawn are ju
 * Left/right: team fouls (count or red dots)
 * Far ends: current quarter + hide/unhide toggle
 
-**Status:** Deferred. Design stub can be implemented in V1.0.
+**Status:** ✅ Implemented in V1.0 layout.
 
 ---
 
@@ -229,7 +171,51 @@ We currently log Personal Fouls (PF) as committed events. But fouls drawn are ju
 * Noise during games
 * Training the model to understand stat phrases reliably
 
-**Status:**  Deferred — worth prototyping post-V1.0 as an accessibility + power-user feature
+**Status:** Deferred — worth prototyping post-V1.0 as an accessibility + power-user feature
+
+---
+
+## 🔁 Mistake Tolerance Improvements
+
+**Idea:** Allow shot modal cancellation by tapping outside the modal, instead of forcing a user to choose Made/Miss.
+
+**Status:** ✅ Implemented in modal UX in V1.0.
+
+---
+
+## 🧭 Event Log Enhancements
+
+**Planned Improvements:**
+
+* Reverse the display order to show most recent events first
+* Distinguish team visually:
+
+  * Option A: Prefix each entry with \[Home] or \[Away]
+  * Option B: Color-code the jersey number by team color
+
+**Status:** Planned for near-term UX update.
+
+---
+
+## 📦 Transitioning to PWA & Repurposing GH Pages
+
+**Plan:**
+
+* Continue refining the GH Pages version until feature-complete and layout-stable
+* When ready, wrap the app into a PWA for installation and native experience
+* Retain `gh-pages` as:
+
+  * A frictionless live demo
+  * A fallback environment
+  * A landing page and/or help/docs site
+
+**Benefits:**
+
+* Easy public sharing without installs
+* Real-world field testing under zero setup
+* Ability to redirect or guide users into the PWA from a central, static homepage
+
+**Status:** Planned post-stabilization of GH Pages build
 
 ---
 
