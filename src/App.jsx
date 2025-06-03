@@ -304,9 +304,17 @@ return (
       <div style={{ marginTop: "1rem" }}>
         <h4>Event Log:</h4>
         <ul>
-          {eventLog.map((event, index) => (
+          {[...eventLog].reverse().map((event, index) => (
             <li key={index}>
-              #{event.playerId} | {event.statType}{" "}
+              <span
+                  style={{
+                    color: event.team === "home" ? teamConfig.home.color : teamConfig.away.color,
+                    fontWeight: "bold",
+                  }}
+                >
+                 #{event.playerId}
+              </span>{" "}
+              | {event.statType}{" "}
               {event.zoneId ? `@ ${event.zoneId}` : ""}{" "}
               {event.made !== null ? (event.made ? "✅" : "❌") : ""}
             </li>
