@@ -207,6 +207,7 @@ return (
         config={teamConfig.home}
         selectedPlayer={selectedPlayer}
         onSelect={setSelectedPlayer}
+        backgroundTint="rgba(0, 128, 0, 0.12)" // subtle green tint for PAO
         onEdit={(newPlayers) =>
           setTeamConfig((prev) => ({
             ...prev,
@@ -222,6 +223,7 @@ return (
         config={teamConfig.away}
         selectedPlayer={selectedPlayer}
         onSelect={setSelectedPlayer}
+        backgroundTint="rgba(255, 0, 0, 0.12)" // subtle red tint for Oly
         onEdit={(newPlayers) =>
           setTeamConfig((prev) => ({
             ...prev,

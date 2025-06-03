@@ -1,11 +1,18 @@
 import React from "react";
 import "./PlayerGrid.css"; // optional, or inline styles
 
-const PlayerGrid = ({ team, config, selectedPlayer, onSelect, onEdit }) => {
+const PlayerGrid = ({ team, config, selectedPlayer, onSelect, onEdit, backgroundTint }) => {
   const { players, color } = config;
 
   return (
-    <div className="player-grid">
+    <div
+      className="player-grid"
+      style={{
+        backgroundColor: backgroundTint,
+        padding: "0.5rem",
+        borderRadius: "6px"
+      }}
+    >
       {/* Comment out team headings <h4 style={{ color }}>{config.name || team}</h4> */}
       <div className="player-grid-buttons">
         {players.map((number, index) => {
