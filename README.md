@@ -70,7 +70,7 @@ Live version (via gh-pages): https://wiubiki.github.io/snapstats
 ## Screenshots
 
 ###  Mobile Layout (Full Court in View)
-![Mobile View](./screenshots/mobile-view.png)
+![Mobile View](./screenshots/mobile_view.png)
 
 ###  Shot Modal (Made/Miss)
 ![Shot Modal](./screenshots/shot_result_modal.png)
