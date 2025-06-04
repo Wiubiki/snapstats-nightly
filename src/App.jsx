@@ -53,6 +53,27 @@ function App() {
     localStorage.setItem("snapstats_eventLog", JSON.stringify(updatedLog));
   };
 
+  // Function to Export Game Data as json file
+  const exportGameData = () => {
+    const data = {
+      timestamp: new Date().toISOString(),
+      teamConfig,
+      eventLog,
+    };
+  
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
+  
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `snapstats_game_${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+  
+
   // Shot Result Modal
   const [showModal, setShowModal] = useState(false);
   const [pendingZone, setPendingZone] = useState(null);
@@ -262,8 +283,20 @@ return (
         
       )}
 
-      {/* Button for changing quarter, undo action and  reseting game */}
-     
+      {/* Buttons data export, undo action and  reseting game */}
+
+      <button
+        onClick={exportGameData}
+        style={{
+          padding: "0.4rem 0.6rem",
+          border: "1px solid #ccc",
+          borderRadius: "4px",
+          marginLeft: "0.5rem"
+        }}
+      >
+        Export Game
+      </button>
+           
       <button
         onClick={() => {
           if (window.confirm("Reset all logged events?")) {
