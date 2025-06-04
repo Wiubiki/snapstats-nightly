@@ -7,10 +7,10 @@ import ShotResultModal from "./components/ShotResultModal.jsx";
 
 
 
+  // ✅ place useStates  inside App component
 
 
 function App() {
-  // ✅ useState must be inside App component
   const [teamConfig, setTeamConfig] = useState({
     home: {
       name: "Home",
