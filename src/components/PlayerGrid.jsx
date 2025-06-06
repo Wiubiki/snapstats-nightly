@@ -13,7 +13,8 @@ const PlayerGrid = ({ team, config, selectedPlayer, onSelect, onEdit, background
         borderRadius: "6px"
       }}
     >
-      {/* Comment out team headings <h4 style={{ color }}>{config.name || team}</h4> */}
+      <h4 style={{ color, textAlign: "center", margin: "0.5em" }}>{config.name || team}</h4>
+      
       <div className="player-grid-buttons">
         {players.map((number, index) => {
           const isSelected =
@@ -23,6 +24,7 @@ const PlayerGrid = ({ team, config, selectedPlayer, onSelect, onEdit, background
         
           return (
             <div key={index} className="player-edit-wrapper">
+			  {/*}
               <input
                 type="number"
                 value={number}
@@ -34,7 +36,7 @@ const PlayerGrid = ({ team, config, selectedPlayer, onSelect, onEdit, background
                   onEdit(updated); // new prop we'll add
                 }}
                 className="jersey-input"
-              />
+              /> */}
               <button
                 className={`player-btn ${isSelected ? "selected" : ""}`}
                 style={{
