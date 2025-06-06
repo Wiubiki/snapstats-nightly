@@ -93,7 +93,7 @@ function App() {
       zoneId,
       made,
       timestamp: Date.now(),
-      quarter: 1, // default for now
+      quarter, // use dynamic quarter state
       metadata: {} // reserved for future use
     };
 
@@ -108,6 +108,7 @@ function App() {
   
     // Reset interaction
     setSelectedStat(null);
+    
   };
   
   //Handle Court Taps for Shot Stats
@@ -149,20 +150,20 @@ return (
 	      setQuarter((prev) => {
 	        const next = Math.max(1, Math.min(prev + delta, 4));
 	        if (next !== prev) {
-	          // Reset foul-related events only (optional enhancement)
-	          setEventLog((prevLog) =>
-	            prevLog.filter((e) => e.statType !== "PF")
-	          );
-	          localStorage.setItem(
-	            "snapstats_eventLog",
-	            JSON.stringify(
-	              eventLog.filter((e) => e.statType !== "PF")
-	            )
-	          );
+	          // Filter out PFs
+	          setEventLog((prevLog) => {
+	            const newLog = prevLog.filter((e) => e.statType !== "PF");
+	            localStorage.setItem("snapstats_eventLog", JSON.stringify(newLog));
+	            return newLog;
+	          });
 	        }
 	        return next;
 	      });
 	    }}
+	    onToggleConfig={() => setShowConfigPanel(prev => !prev)}
+	    homeColor={teamConfig.home.color}
+	    awayColor={teamConfig.away.color}
+	    
 	    
 	  />
 	  </div>
@@ -302,6 +303,7 @@ return (
           if (window.confirm("Reset all logged events?")) {
             localStorage.removeItem("snapstats_eventLog");
             setEventLog([]);
+            setQuarter(1); // reset quarter as well
           }
         }}
         style={{

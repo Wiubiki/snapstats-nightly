@@ -17,6 +17,8 @@ const FoulBoxes = ({ count }) => {
         />
       ))}
     </div>
+    
+    
   );
 };
 
@@ -26,46 +28,61 @@ export default function GameRibbon({
   homeFouls,
   awayFouls,
   quarter,
-  onQuarterChange
+  onQuarterChange,
+  onToggleConfig,
+  homeColor,
+  awayColor
 }) {
   return (
     <div
       style={{
-        position: "absolute",
-        top: 0,
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: "90%",
-        background: "#ffffff", // solid white
         display: "flex",
-        justifyContent: "space-between",
         alignItems: "center",
-        padding: "12px 8px",
+        justifyContent: "space-between",
+        width: "100%",
+        background: "#ffffffcc",
+        padding: "6px 8px",
         zIndex: 999,
         fontSize: "14px"
       }}
     >
-      {/* Home */}
-      <div style={{ textAlign: "left", fontSize:"18px", color: "#007b00" }}>
-        <div style={{ fontWeight: "bold" }}>{homeScore}</div>
+      {/* Left: Home score + fouls */}
+      <div style={{ width: "25%", textAlign: "left", color: homeColor }}>
+        <div style={{ fontSize: "18px" }}>{homeScore}</div>
         <FoulBoxes count={homeFouls} />
       </div>
-
-      {/* Quarter + Controls */}
-      <div style={{ fontWeight: "bold", textAlign: "center" }}>
-        <div style={{ fontSize: "16px" }}>Q{quarter}</div>
+    
+      {/* Center: Quarter */}
+      <div style={{ width: "50%", textAlign: "center", fontWeight: "bold" }}>
+        Q{quarter}
         <div>
-          <button onClick={() => onQuarterChange(-1)}>&lt;</button>
-          <button onClick={() => onQuarterChange(1)}>&gt;</button>
+          <button onClick={() => onQuarterChange(-1)}>{"<"}</button>
+          <button onClick={() => onQuarterChange(1)}>{">"}</button>
         </div>
       </div>
-      
-
-      {/* Away + Menu */}
-      <div style={{ textAlign: "right", fontSize:"18px", color: "#cc0000" }}>
-        <div style={{ fontWeight: "bold" }}>{awayScore}</div>
-        <FoulBoxes count={awayFouls} />
+    
+      {/* Right: Away score + fouls + burger */}
+      <div style={{ width: "25%", display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "0.5rem" }}>
+        <div style={{ textAlign: "right", color: awayColor }}>
+          <div style={{ fontSize: "18px" }}>{awayScore}</div>
+          <FoulBoxes count={awayFouls} />
+        </div>
+    
+        <button
+          onClick={onToggleConfig}
+          style={{
+            background: "none",
+            border: "none",
+            fontSize: "1.5rem",
+            cursor: "pointer",
+            padding: "0"
+          }}
+        >
+          ☰
+        </button>
       </div>
     </div>
+    
+    
   );
 }
