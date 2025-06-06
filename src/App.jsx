@@ -235,7 +235,8 @@ return (
 	  									maxWidth:"100%", 
 	  									height: "auto", 
 	  									position:"relative", 
-	  									overflow: "hidden"  }}>
+	  									overflow: "hidden",
+	  									top: "0px"  }}>
 
       <InteractiveCourt onZoneClick={handleZoneClick} />
       </div>
@@ -347,14 +348,20 @@ return (
       )}
 
       {/* Buttons data export, undo action and  reseting game */}
-
+	  <div style= {{
+	  	display: "flex",
+	  	justifyContent: "space-between",
+	  	width: "100%",
+	  	marginTop: "1rem", // optional spacing
+	  	gap: "0.5rem", //option for minor breathing room if needed
+	  }}>
       <button
         onClick={exportGameData}
         style={{
-          padding: "0.4rem 0.6rem",
+          padding: "0.5rem 1rem",
           border: "1px solid #ccc",
           borderRadius: "4px",
-          marginLeft: "0.5rem"
+          
         }}
       >
         Export Game
@@ -369,11 +376,11 @@ return (
           }
         }}
         style={{
-          marginTop: "1rem",
+          
           padding: "0.5rem 1rem",
           backgroundColor: "#dc3545",
           color: "white",
-          border: "none",
+          border: "1px solid #ccc",
           borderRadius: "4px",
           cursor: "pointer"
         }}
@@ -384,19 +391,18 @@ return (
       <button
         onClick={handleUndo}
         style={{
-          marginTop: "1rem",
-          marginRight: "0.5rem",
+          
           padding: "0.5rem 1rem",
           backgroundColor: "#6c757d",
           color: "white",
-          border: "none",
+          border: "1px solid #ccc",
           borderRadius: "4px",
           cursor: "pointer"
         }}
       >
         Undo Last
       </button>
-  
+  	</div>
       {/* 🧪 Event Log */}
       <div style={{ marginTop: "1rem" }}>
         <h4>Event Log:</h4>

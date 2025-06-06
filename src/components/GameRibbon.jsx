@@ -40,10 +40,11 @@ export default function GameRibbon({
         alignItems: "center",
         justifyContent: "space-between",
         width: "100%",
-        background: "#ffffffcc",
+        background: "#ffffff",
         padding: "6px 8px",
         zIndex: 999,
-        fontSize: "14px"
+        fontSize: "14px",
+        position: "sticky"
       }}
     >
       {/* Left: Home score + fouls */}

@@ -9,6 +9,7 @@ const InteractiveCourt = ({ onZoneClick }) => {
   };
 
   return (
+	<div style={{ overflow: "hidden", height: "auto", width: "100%", position: "relative", marginBottom:"-50px" }}>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 500 470"
@@ -18,6 +19,7 @@ const InteractiveCourt = ({ onZoneClick }) => {
         height: "auto",
         maxWidth: "100vw",
         display: "block",
+        transform: "translateY(-50px)",  // 👈 this shifts the court up visually
         backgroundColor: "#f9f9f9"
       }}
       onClick={handleClick}
@@ -35,6 +37,7 @@ const InteractiveCourt = ({ onZoneClick }) => {
 	<polygon id="corner_2_right" points="330,470.00 470,470.00 470,330.00 330,330.00" fill="rgba(128,128,128,0.15)" stroke="rgba(200,0,0,0.8)" strokeWidth="1"/>
 	<polygon id="paint" points="170,470.00 330,470.00 330,280.00 170,280.00" fill="rgba(255,0,255,0.15)" stroke="rgba(200,0,0,0.8)" strokeWidth="1"/>
     </svg>
+    </div>
   );
 };
 
