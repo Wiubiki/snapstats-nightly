@@ -6,21 +6,35 @@ import GameRibbon from "./components/GameRibbon";
 import ShotResultModal from "./components/ShotResultModal.jsx";
 import TeamConfigPanel from "./components/TeamConfigPanel";
 
-  // ✅ place useStates  inside App component
+
+// helper function to convert hex to RGBA
+function hexToRGBA(hex, alpha) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
 
 
 function App() {
-  const [teamConfig, setTeamConfig] = useState({
-    home: {
-      name: "Home",
-      color: "#18bd0d",
-      players: Array.from({ length: 12 }, (_, i) => i + 4)
-    },
-    away: {
-      name: "Away",
-      color: "#dc3545",
-      players: Array.from({ length: 12 }, (_, i) => i + 4)
-    }
+  // ✅ useState must be inside App component
+  const [teamConfig, setTeamConfig] = useState(() => {
+    const saved = localStorage.getItem("snapstats_teamConfig");
+    return saved
+      ? JSON.parse(saved)
+      : {
+          home: {
+            name: "Home",
+            color: "#18bd0d",
+            players: Array.from({ length: 12 }, (_, i) => i + 4)
+          },
+          away: {
+            name: "Away",
+            color: "#dc3545",
+            players: Array.from({ length: 12 }, (_, i) => i + 4)
+          }
+        };
+
   });
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [selectedStat, setSelectedStat] = useState(null);
@@ -92,6 +106,7 @@ function App() {
       type: "STAT",
       playerId: selectedPlayer.playerId,
       team: selectedPlayer.team,
+      teamName: teamConfig[selectedPlayer.team].name, // team name as inserted in config panel
       statType: statOverride || selectedStat,
       zoneId,
       made,
@@ -137,6 +152,12 @@ function App() {
     }
   }, []);
 
+  // useEffect for teamConfig persistence
+  useEffect(() => {
+    localStorage.setItem("snapstats_teamConfig", JSON.stringify(teamConfig));
+  }, [teamConfig]);
+  
+
 
   
 
@@ -171,12 +192,37 @@ return (
 	    
 	    
 	  />
-
+	  
+	  {/* configPanel with click-outside handler */}
 	  {showConfigPanel && (
-	    <TeamConfigPanel
-	      teamConfig={teamConfig}
-	      setTeamConfig={setTeamConfig}
-	    />
+	    <div
+	      onClick={(e) => {
+	        if (e.target.id === "config-backdrop") {
+	          setShowConfigPanel(false);
+	        }
+	      }}
+	      onKeyDown={(e) => {
+	        if (e.key === "Escape") {
+	          setShowConfigPanel(false);
+	        }
+	      }}
+	      tabIndex={-1}
+	      id="config-backdrop"
+	      style={{
+	        position: "fixed",
+	        top: 0,
+	        left: 0,
+	        width: "100vw",
+	        height: "100vh",
+	        background: "rgba(0,0,0,0.2)",
+	        zIndex: 1000,
+	      }}
+	    >
+	      <TeamConfigPanel
+	        teamConfig={teamConfig}
+	        setTeamConfig={setTeamConfig}
+	      />
+	    </div>
 	  )}
 	  
 	  </div>
@@ -245,7 +291,7 @@ return (
         config={teamConfig.home}
         selectedPlayer={selectedPlayer}
         onSelect={setSelectedPlayer}
-        backgroundTint="rgba(0, 128, 0, 0.12)" // subtle green tint for PAO
+        backgroundTint={hexToRGBA(teamConfig.home.color, 0.18)} // changes dynamically with color picked in config panel
         onEdit={(newPlayers) =>
           setTeamConfig((prev) => ({
             ...prev,
@@ -261,7 +307,7 @@ return (
         config={teamConfig.away}
         selectedPlayer={selectedPlayer}
         onSelect={setSelectedPlayer}
-        backgroundTint="rgba(255, 0, 0, 0.12)" // subtle red tint for Oly
+        backgroundTint={hexToRGBA(teamConfig.away.color, 0.18)} // changes dynamically with color picked in config panel
         onEdit={(newPlayers) =>
           setTeamConfig((prev) => ({
             ...prev,
