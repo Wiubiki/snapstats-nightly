@@ -4,8 +4,7 @@ import PlayerGrid from "./components/PlayerGrid";
 import StatTypeSelector from "./components/StatTypeSelector";
 import GameRibbon from "./components/GameRibbon";
 import ShotResultModal from "./components/ShotResultModal.jsx";
-
-
+import TeamConfigPanel from "./components/TeamConfigPanel";
 
   // ✅ place useStates  inside App component
 
@@ -27,6 +26,10 @@ function App() {
   const [selectedStat, setSelectedStat] = useState(null);
   const [eventLog, setEventLog] = useState([]);
   const [quarter, setQuarter] = useState(1);
+
+  // Define state for configPanel visibility
+  const [showConfigPanel, setShowConfigPanel] = useState(false);
+  
 
   // Helper functions for team score + fouls
   const getScoreForTeam = (team) => {
@@ -139,6 +142,8 @@ function App() {
 
 return (
     <div className="App" style={{ padding: "1rem", maxWidth:"100vw", overflowX:"hidden", margin: "0 auto" }}>
+
+    {/* Game Ribbon & Burger Menu Sections */}
     <div className="GameRibbon" style={{ width: "100%",  maxWidth:"100vw", height: "auto"  }}>
 	  <GameRibbon
 	    homeScore={getScoreForTeam("home")}
@@ -166,7 +171,18 @@ return (
 	    
 	    
 	  />
+
+	  {showConfigPanel && (
+	    <TeamConfigPanel
+	      teamConfig={teamConfig}
+	      setTeamConfig={setTeamConfig}
+	    />
+	  )}
+	  
 	  </div>
+
+
+	  
 
 	  <div className="court-wrapper" style={{ 
 	  									width: "100vw",  
