@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 const TeamConfigPanel = ({ teamConfig, setTeamConfig }) => {
   const handleNameChange = (team, newName) => {
@@ -8,6 +8,12 @@ const TeamConfigPanel = ({ teamConfig, setTeamConfig }) => {
     }));
   };
 
+const [rawInputs, setRawInputs] = useState({
+  home: teamConfig.home.players.join(", "),
+  away: teamConfig.away.players.join(", ")
+});
+
+
   const handleColorChange = (team, newColor) => {
     setTeamConfig((prev) => ({
       ...prev,
@@ -15,16 +21,31 @@ const TeamConfigPanel = ({ teamConfig, setTeamConfig }) => {
     }));
   };
 
-  const handlePlayersChange = (team, playerStr) => {
-    const players = playerStr
+const handlePlayersChange = (team, rawValue) => {
+    setRawInputs((prev) => ({ ...prev, [team]: rawValue }));
+  
+    const parsed = rawValue
       .split(",")
-      .map((n) => parseInt(n.trim(), 10))
-      .filter((n) => !isNaN(n));
-    setTeamConfig((prev) => ({
-      ...prev,
-      [team]: { ...prev[team], players }
-    }));
+      .map((s) => parseInt(s.trim(), 10))
+      .filter((n) => !isNaN(n) && n >= 0 && n <= 99);
+  
+    console.log(`Raw input for ${team}:`, rawValue);
+    console.log("Parsed jersey numbers:", parsed);
+  
+    setTeamConfig((prev) => {
+      const newConfig = {
+        ...prev,
+        [team]: {
+          ...prev[team],
+          players: parsed
+        }
+      };
+      localStorage.setItem("snapstats_teamConfig", JSON.stringify(newConfig));
+      return newConfig;
+    });
   };
+  
+  
 
   return (
     <div
@@ -69,7 +90,7 @@ const TeamConfigPanel = ({ teamConfig, setTeamConfig }) => {
             Jersey Numbers (comma-separated):
             <input
               type="text"
-              value={teamConfig[team].players.join(", ")}
+              value={rawInputs[team]}
               onChange={(e) => handlePlayersChange(team, e.target.value)}
               style={{ width: "100%" }}
             />
