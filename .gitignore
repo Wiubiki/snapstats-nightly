@@ -1,3 +1,14 @@
+# dependencies
 node_modules/
+
+# Vite build output
 dist/
-.cache/
+.vite/
+
+# local dev files
+.env
+.env.*.local
+
+# OS + editor cruft
+.DS_Store
+*.log
