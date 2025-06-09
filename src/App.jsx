@@ -5,6 +5,8 @@ import StatTypeSelector from "./components/StatTypeSelector";
 import GameRibbon from "./components/GameRibbon";
 import ShotResultModal from "./components/ShotResultModal.jsx";
 import TeamConfigPanel from "./components/TeamConfigPanel";
+import Toast from "./Toast";
+
 
 
 // helper function to convert hex to RGBA
@@ -68,6 +70,7 @@ function App() {
     const updatedLog = [...eventLog.slice(0, -1)];
     setEventLog(updatedLog);
     localStorage.setItem("snapstats_eventLog", JSON.stringify(updatedLog));
+    setToastMsg("✅ Last action undone");
   };
 
   // Function to Export Game Data as json file
@@ -88,6 +91,7 @@ function App() {
     a.download = `snapstats_game_${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
+    setToastMsg("📤 Game exported");
   };
   
 
@@ -95,6 +99,8 @@ function App() {
   const [showModal, setShowModal] = useState(false);
   const [pendingZone, setPendingZone] = useState(null);
   
+  // Toast functionality
+  const [toastMsg, setToastMsg] = useState("");
   
   
 
@@ -373,6 +379,7 @@ return (
             localStorage.removeItem("snapstats_eventLog");
             setEventLog([]);
             setQuarter(1); // reset quarter as well
+            setToastMsg("♻️ Game reset");
           }
         }}
         style={{
@@ -402,7 +409,13 @@ return (
       >
         Undo Last
       </button>
+      
+      {/* Adding Toast Component to the Render Tree */}
+      {toastMsg && <Toast message={toastMsg} onClose={() => setToastMsg("")} />}
+      
   	</div>
+
+  	
       {/* 🧪 Event Log */}
       <div style={{ marginTop: "1rem" }}>
         <h4>Event Log:</h4>
