@@ -43,6 +43,23 @@ function App() {
   const [eventLog, setEventLog] = useState([]);
   const [quarter, setQuarter] = useState(1);
 
+  //Define default state for event log toggle
+  const [showEventLog, setShowEventLog] = useState(() => {
+  	  const saved = localStorage.getItem("snapstats_showLog");
+  	  return saved === null ? true : saved === "true";
+  	});
+
+  // Helper Function for Event Log toggle
+  const toggleEventLog = () => {
+  		  setShowEventLog(prev => {
+  		    const next = !prev;
+  		    localStorage.setItem("snapstats_showLog", next);
+  		    return next;
+  		  });
+  		};
+  				
+  
+
   // Define state for configPanel visibility
   const [showConfigPanel, setShowConfigPanel] = useState(false);
   
@@ -353,7 +370,7 @@ return (
         
       )}
 
-      {/* Buttons data export, undo action and  reseting game */}
+      {/* Buttons data export, undo action, reseting game and hide/show event log */}
 	  <div style= {{
 	  	display: "flex",
 	  	justifyContent: "space-between",
@@ -409,6 +426,21 @@ return (
       >
         Undo Last
       </button>
+
+
+      <button
+        onClick={toggleEventLog}
+        style={{
+          padding: "0.5rem 1rem",
+          backgroundColor: "#8fcbd0",
+          color: "black",
+          border: "1px solid #ccc",
+          borderRadius: "4px",
+          cursor: "pointer"
+        }}
+      >
+        {showEventLog ? "Hide Event Log" : "Show Event Log"}
+      </button>
       
       {/* Adding Toast Component to the Render Tree */}
       {toastMsg && <Toast message={toastMsg} onClose={() => setToastMsg("")} />}
@@ -417,6 +449,7 @@ return (
 
   	
       {/* 🧪 Event Log */}
+     {showEventLog && (
       <div style={{ marginTop: "1rem" }}>
         <h4>Event Log:</h4>
         <ul>
@@ -437,6 +470,7 @@ return (
           ))}
         </ul>
       </div>
+     )}
 
       
       
