@@ -53,7 +53,7 @@ export default function GameRibbon({
         <FoulBoxes count={homeFouls} />
       </div>
     
-      {/* Center: Quarter Selector */}
+      {/* Center: Quarter Selector Section */}
       <div style={{
         flex: 1,
         display: "flex",
