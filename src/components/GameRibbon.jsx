@@ -48,27 +48,71 @@ export default function GameRibbon({
       }}
     >
       {/* Left: Home score + fouls */}
-      <div style={{ width: "25%", textAlign: "left", color: homeColor }}>
+      <div style={{ flex: 1, textAlign: "left", color: homeColor }}>
         <div style={{ fontSize: "18px" }}>{homeScore}</div>
         <FoulBoxes count={homeFouls} />
       </div>
     
-      {/* Center: Quarter */}
-      <div style={{ width: "50%", textAlign: "center", fontWeight: "bold" }}>
-        Q{quarter}
-        <div>
-          <button onClick={() => onQuarterChange(-1)}>{"<"}</button>
-          <button onClick={() => onQuarterChange(1)}>{">"}</button>
+      {/* Center: Quarter Selector */}
+      <div style={{
+        flex: 1,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: "2px",
+        marginTop: "4px"  // Add vertical spacing if needed
+      }}>
+        <button
+          onClick={() => onQuarterChange(-1)}
+          style={{
+            padding: "4px ",
+            border: "none",
+            background: "none",
+            fontSize: "20px",
+            minWidth: "30px",
+            
+          }}
+          aria-label="Previous quarter"
+        >
+          ◀
+        </button>
+      
+        <div style={{
+          padding: "4px 12px",
+          borderRadius: "12px",
+          backgroundColor: "#f0f0f0",
+          fontWeight: "bold",
+          fontSize: "20px",
+          minWidth: "48px",
+          textAlign: "center"
+        }}>
+          Q{quarter}
         </div>
+      
+        <button
+          onClick={() => onQuarterChange(1)}
+          style={{
+            padding: "4px ",
+            border: "none",
+            background: "none",
+            fontSize: "20px",
+            minWidth: "30px",
+            
+          }}
+          aria-label="Next quarter"
+        >
+          ▶
+        </button>
       </div>
+      
+      
     
       {/* Right: Away score + fouls + burger */}
-      <div style={{ width: "25%", display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "0.5rem" }}>
-        <div style={{ textAlign: "right", color: awayColor }}>
+      <div style={{ flex: 1, display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "0.5rem", textAlign: "right", color: awayColor }}>
+        <div>
           <div style={{ fontSize: "18px" }}>{awayScore}</div>
           <FoulBoxes count={awayFouls} />
         </div>
-    
         <button
           onClick={onToggleConfig}
           style={{
@@ -82,6 +126,7 @@ export default function GameRibbon({
           ☰
         </button>
       </div>
+      
     </div>
     
     
