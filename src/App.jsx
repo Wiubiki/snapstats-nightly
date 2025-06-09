@@ -428,19 +428,6 @@ return (
       </button>
 
 
-      <button
-        onClick={toggleEventLog}
-        style={{
-          padding: "0.5rem 1rem",
-          backgroundColor: "#8fcbd0",
-          color: "black",
-          border: "1px solid #ccc",
-          borderRadius: "4px",
-          cursor: "pointer"
-        }}
-      >
-        {showEventLog ? "Hide Event Log" : "Show Event Log"}
-      </button>
       
       {/* Adding Toast Component to the Render Tree */}
       {toastMsg && <Toast message={toastMsg} onClose={() => setToastMsg("")} />}
@@ -449,9 +436,24 @@ return (
 
   	
       {/* 🧪 Event Log */}
+	<button
+	  onClick={toggleEventLog}
+	  style={{
+	    marginTop: "1rem",
+	    marginBottom: "0.25rem",
+	    padding: "4px 8px",
+	    fontSize: "14px",
+	    backgroundColor: "#eee",
+	    borderRadius: "6px",
+	    cursor: "pointer"
+	  }}
+	>
+	  {showEventLog ? "Hide Event Log" : "Show Event Log"}
+	</button>
+	
+ 		     
      {showEventLog && (
       <div style={{ marginTop: "1rem" }}>
-        <h4>Event Log:</h4>
         <ul>
           {[...eventLog].reverse().map((event, index) => (
             <li key={index}>
