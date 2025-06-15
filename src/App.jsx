@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import InteractiveCourt from "./components/InteractiveCourt";
 import PlayerGrid from "./components/PlayerGrid";
 import StatTypeSelector from "./components/StatTypeSelector";
@@ -6,6 +6,8 @@ import GameRibbon from "./components/GameRibbon";
 import ShotResultModal from "./components/ShotResultModal.jsx";
 import TeamConfigPanel from "./components/TeamConfigPanel";
 import MyTeamConfig from "./components/MyTeamConfig";
+import MenuModal from "./components/MenuModal";
+import GameSettingsModal from "./components/GameSettingsModal";
 import Toast from "./Toast";
 
 
@@ -18,9 +20,104 @@ function hexToRGBA(hex, alpha) {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-
+// useStates must be place insude the App component
 function App() {
-  // ✅ useState must be inside App component
+
+  // State declarations for MenuModal
+  
+  const [isStartup, setIsStartup] = useState(true); // or false if debugging
+
+  const handleResumeGame = () => {
+    const storedTeamConfig = localStorage.getItem("snapstats_teamConfig");
+    const storedEventLog = localStorage.getItem("snapstats_eventLog");
+    const storedQuarter = localStorage.getItem("snapstats_quarter");
+  
+    if (storedTeamConfig) setTeamConfig(JSON.parse(storedTeamConfig));
+    if (storedEventLog) setEventLog(JSON.parse(storedEventLog));
+    if (storedQuarter) setQuarter(parseInt(storedQuarter, 10));
+  
+    setShowMenu(false);
+    setIsStartup(false);
+  };
+  
+
+  const handleQuickStart = () => {
+    console.log("Quick start: reset game with default settings");
+  
+    const defaultTeamConfig = {
+      home: {
+        name: "Home",
+        color: "#18bd0d", // green
+        players: Array.from({ length: 12 }, (_, i) => i + 4)
+      },
+      away: {
+        name: "Away",
+        color: "#dc3545", // red
+        players: Array.from({ length: 12 }, (_, i) => i + 4)
+      }
+    };
+  
+    setTeamConfig(defaultTeamConfig);
+    setQuarter(1);
+    setEventLog([]);
+  
+    localStorage.setItem("snapstats_teamConfig", JSON.stringify(defaultTeamConfig));
+    localStorage.setItem("snapstats_eventLog", JSON.stringify([]));
+  
+    setShowMenu(false);
+    setIsStartup(false);
+  };
+  
+
+  const [showGameSettings, setShowGameSettings] = useState(false);
+
+  // Add File Input Logic for Importing Games
+  const fileInputRef = useRef();
+  
+  const handleImportGame = () => {
+    console.log("Import Game clicked");
+    fileInputRef.current?.click(); // Triggers hidden input
+  };
+  
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+  
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const imported = JSON.parse(e.target.result);
+    
+        if (!imported || !imported.teamConfig || !imported.eventLog || !Array.isArray(imported.eventLog)) {
+          alert("Invalid game file format.");
+          return;
+        }
+    
+        setTeamConfig(imported.teamConfig);
+        setEventLog(imported.eventLog);
+    
+        // Set quarter from file or infer from latest event
+        const latestQuarter = imported.quarter ||
+          imported.eventLog.reduce((max, ev) => Math.max(max, ev.quarter || 1), 1);
+        setQuarter(latestQuarter);
+    
+        setShowMenu(false); // optionally close menu
+        console.log("Game imported successfully");
+      } catch (err) {
+        console.error("Error parsing game file:", err);
+        alert("Failed to load game file.");
+      }
+    };
+    
+    reader.readAsText(file);
+  };
+  
+  
+  
+
+
+  
+  // ✅ Teams Configuration section in burger menu
   const [teamConfig, setTeamConfig] = useState(() => {
     const saved = localStorage.getItem("snapstats_teamConfig");
     return saved
@@ -39,10 +136,24 @@ function App() {
         };
 
   });
+
+  // showMenu and showMyTeamConfig boolean
+  const [showMenu, setShowMenu] = useState(true);
+  const [showMyTeamConfig, setShowMyTeamConfig] = useState(false);
+
+  
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [selectedStat, setSelectedStat] = useState(null);
   const [eventLog, setEventLog] = useState([]);
-  const [quarter, setQuarter] = useState(1);
+  const [quarter, setQuarter] = useState(() => {
+    const saved = localStorage.getItem("snapstats_quarter");
+    return saved ? parseInt(saved, 10) : 1;
+  });
+  useEffect(() => {
+    localStorage.setItem("snapstats_quarter", quarter);
+  }, [quarter]);
+  
+  
 
   //Define default state for event log toggle
   const [showEventLog, setShowEventLog] = useState(() => {
@@ -160,11 +271,6 @@ function App() {
       setShowModal(true);
     }
     
-  /*  Old confirm.window logic for logging miss/made for shots
-    const shotType = zoneId.includes("3") ? "3PT" : "2PT";
-    const made = window.confirm(`${shotType} attempt — made? OK = Yes, Cancel = No`);
-  
-    logStatEvent({ zoneId, made, statOverride: shotType }); */
   };
   
 
@@ -180,6 +286,9 @@ function App() {
   useEffect(() => {
     localStorage.setItem("snapstats_teamConfig", JSON.stringify(teamConfig));
   }, [teamConfig]);
+
+  //Add File Input Logic
+  
   
 
 
@@ -188,11 +297,36 @@ function App() {
 return (
     <div className="App" style={{ padding: "1rem", maxWidth:"100vw", overflowX:"hidden", margin: "0 auto" }}>
 
-	{/* Temp for testing MyTeamConfig  */}
+	{/* Temp for testing MyTeamConfig  
 	<div>
 	      <MyTeamConfig />
 	  </div>  
+	*/}
 
+	{/* Render logic for showMenu and showMyTeamConfig  */}
+	{showMenu && (
+	  <MenuModal
+	    isStartup={isStartup}
+	    resumeGameExists={!!localStorage.getItem("snapstats_eventLog")}
+	    onResumeGame={handleResumeGame}
+	    onQuickStart={handleQuickStart}
+	    onStartNewGame={() => { setShowGameSettings(true); setShowMenu(false); }}
+	    onOpenMyTeam={() => { setShowMyTeamConfig(true); setShowMenu(false); }}
+	    onOpenGameSettings={() => { setShowGameSettings(true); setShowMenu(false); }}
+	    onImportGame={handleImportGame}
+	    onClose={() => setShowMenu(false)}
+	  />
+	)}
+	
+	{showMyTeamConfig && (
+	  <MyTeamConfig onClose={() => {
+	    setShowMyTeamConfig(false);
+	    setShowMenu(true);
+	  }} />
+	)}
+	
+	
+	
 	    
     {/* Game Ribbon & Burger Menu Sections */}
     <div className="GameRibbon" style={{ width: "100%",  maxWidth:"100vw", height: "auto"  }}>
@@ -216,7 +350,7 @@ return (
 	        return next;
 	      });
 	    }}
-	    onToggleConfig={() => setShowConfigPanel(prev => !prev)}
+	    onToggleConfig={() => setShowGameSettings(true)}
 	    homeColor={teamConfig.home.color}
 	    awayColor={teamConfig.away.color}
 	    
@@ -482,6 +616,28 @@ return (
      )}
 
       
+     {/* Hidden File Input   */}
+     <input
+        type="file"
+        accept=".json"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        style={{ display: "none" }}
+      />
+      {/* Render of the GameSettingsModal  */}
+      {showGameSettings && (
+        <GameSettingsModal
+          onClose={() => setShowGameSettings(false)}
+          onSave={(config) => {
+            setTeamConfig(config);
+            setEventLog([]);
+            setQuarter(1);
+            localStorage.setItem("snapstats_teamConfig", JSON.stringify(config));
+            localStorage.setItem("snapstats_eventLog", JSON.stringify([]));
+            localStorage.setItem("snapstats_quarter", 1);
+          }}
+        />
+      )}
       
       
     </div>

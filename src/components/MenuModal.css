@@ -1,0 +1,16 @@
+.menu-btn {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  margin: 6px 0;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.menu-btn:hover {
+  background-color: #0056b3;
+}

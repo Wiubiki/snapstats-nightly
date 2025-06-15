@@ -91,6 +91,7 @@ const DraggablePlayer = ({ player, onDelete, onEdit, isEditing, onToggleEdit, on
   );
 };
 
+
 const DroppableArea = ({ players, onDrop, title, children, onDelete, onEdit, editingId, onToggleEdit, onRequestDelete }) => {
   const [, drop] = useDrop({
     accept: ItemTypes.PLAYER,
@@ -128,7 +129,7 @@ const DroppableArea = ({ players, onDrop, title, children, onDelete, onEdit, edi
   );
 };
 
-export default function MyTeamConfig() {
+export default function MyTeamConfig({ onClose }) {
   const [availablePlayers, setAvailablePlayers] = useState([]);
   const [rosterPlayers, setRosterPlayers] = useState([]);
   const [teamName, setTeamName] = useState('');
@@ -164,6 +165,25 @@ export default function MyTeamConfig() {
       setAvailablePlayers(initialPlayers);
     }
   }, []);
+
+  const handleSave = () => {
+    const allPlayers = [...rosterPlayers, ...availablePlayers];
+    const players = allPlayers.map((p) => ({
+      ...p,
+      inRoster: rosterPlayers.some((r) => r.id === p.id),
+    }));
+  
+    const myTeamData = {
+      teamName,
+      primaryColor,
+      secondaryColor,
+      players
+    };
+  
+    localStorage.setItem('snapstats.myTeam', JSON.stringify(myTeamData));
+    console.log("MyTeam saved:", myTeamData);
+  };
+  
 
   const saveToStorage = (roster, available) => {
     const allPlayers = [
@@ -240,7 +260,90 @@ export default function MyTeamConfig() {
 
   return (
     <DndProvider backend={HTML5Backend}>
+
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        width: '100%',
+        maxWidth: '400px',
+        marginBottom: '16px'
+      }}
+    >
+      {onClose && (
+        <button
+          onClick={onClose}
+          style={{
+            padding: '6px 12px',
+            backgroundColor: '#ccc',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer'
+          }}
+        >
+          ⬅️ Back to Menu
+        </button>
+      )}
+    
+      <button
+        onClick={handleSave}
+        style={{
+          padding: '6px 12px',
+          backgroundColor: '#28a745',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer'
+        }}
+      >
+        💾 Save MyTeam
+      </button>
+    </div>
+    
+    
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      {/* Name & Color Pickers for MyTeamConfig   */}
+      <div style={{ marginBottom: "16px", width: "100%", maxWidth: "320px" }}>
+        <label style={{ display: "block", marginBottom: "6px" }}>
+          Team Name:
+          <input
+            type="text"
+            value={teamName}
+            onChange={(e) => setTeamName(e.target.value)}
+            style={{
+              width: "65%",
+              padding: "6px",
+              marginTop: "4px",
+              borderRadius: "4px",
+              border: "1px solid #ccc"
+            }}
+          />
+        </label>
+      
+        <label style={{ display: "block", margin: "12px 0 6px" }}>
+          Primary Color:
+          <input
+            type="color"
+            value={primaryColor}
+            onChange={(e) => setPrimaryColor(e.target.value)}
+            style={{ marginLeft: "8px", verticalAlign: "middle" }}
+          />
+        </label>
+      
+        <label style={{ display: "block", margin: "6px 0" }}>
+          Secondary Color:
+          <input
+            type="color"
+            value={secondaryColor}
+            onChange={(e) => setSecondaryColor(e.target.value)}
+            style={{ marginLeft: "8px", verticalAlign: "middle" }}
+          />
+        </label>
+
+		 
+      </div>
+      
+      
         <DroppableArea
           players={rosterPlayers}
           onDrop={movePlayerToRoster}
