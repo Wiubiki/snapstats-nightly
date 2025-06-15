@@ -5,6 +5,7 @@ import StatTypeSelector from "./components/StatTypeSelector";
 import GameRibbon from "./components/GameRibbon";
 import ShotResultModal from "./components/ShotResultModal.jsx";
 import TeamConfigPanel from "./components/TeamConfigPanel";
+import MyTeamConfig from "./components/MyTeamConfig";
 import Toast from "./Toast";
 
 
@@ -187,6 +188,12 @@ function App() {
 return (
     <div className="App" style={{ padding: "1rem", maxWidth:"100vw", overflowX:"hidden", margin: "0 auto" }}>
 
+	{/* Temp for testing MyTeamConfig  */}
+	<div>
+	      <MyTeamConfig />
+	  </div>  
+
+	    
     {/* Game Ribbon & Burger Menu Sections */}
     <div className="GameRibbon" style={{ width: "100%",  maxWidth:"100vw", height: "auto"  }}>
 	  <GameRibbon
