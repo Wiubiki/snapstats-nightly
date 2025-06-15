@@ -6,5 +6,5 @@ const repoName = 'snapstats';
 
 export default defineConfig({
   plugins: [react()],
-  base: `/${repoName}/`,
+  base: '/snapstats-nightly/',
 });
