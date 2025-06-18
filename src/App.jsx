@@ -8,6 +8,7 @@ import TeamConfigPanel from "./components/TeamConfigPanel";
 import MyTeamConfig from "./components/MyTeamConfig";
 import MenuModal from "./components/MenuModal";
 import GameSettingsModal from "./components/GameSettingsModal";
+import MyTeamStats from "./components/MyTeamStats";
 import Toast from "./Toast";
 
 
@@ -263,6 +264,14 @@ function App() {
     setSelectedStat(null);
     
   };
+
+	 // Introducing shotcharts
+	 const [showMyTeamStats, setShowMyTeamStats] = useState(false);
+	 const [myTeam, setMyTeam] = useState(() => {
+	   const stored = localStorage.getItem("snapstats.myTeam");
+	   return stored ? JSON.parse(stored) : null;
+	 });
+  
   
   //Handle Court Taps for Shot Stats
   const handleZoneClick = (zoneId) => {
@@ -270,8 +279,9 @@ function App() {
       setPendingZone(zoneId);
       setShowModal(true);
     }
+   };
     
-  };
+
   
 
   // ✅ Local storage hydration — must be inside App()
@@ -532,26 +542,12 @@ return (
       </button>
            
       <button
-        onClick={() => {
-          if (window.confirm("Reset all logged events?")) {
-            localStorage.removeItem("snapstats_eventLog");
-            setEventLog([]);
-            setQuarter(1); // reset quarter as well
-            setToastMsg("♻️ Game reset");
-          }
-        }}
-        style={{
-          
-          padding: "0.5rem 1rem",
-          backgroundColor: "#dc3545",
-          color: "white",
-          border: "1px solid #ccc",
-          borderRadius: "4px",
-          cursor: "pointer"
-        }}
+        onClick={() => setShowMyTeamStats(true)}
+        className="bg-green-500 text-white px-4 py-2 rounded"
       >
-        Reset Game
+        📊 View MyTeam Stats
       </button>
+      
 
       <button
         onClick={handleUndo}
@@ -568,7 +564,18 @@ return (
         Undo Last
       </button>
 
-
+	{/* ShowMyTeamStats helper */}
+	{showMyTeamStats && myTeam && (
+	  <ShotChart
+	    eventLog={eventLog}
+	    myTeam={myTeam}
+	    onClose={() => setShowMyTeamStats(false)}
+	  />
+	)}
+	
+	{/* Main UI: Game Ribbon + Court + Player Grid */}
+	<div className="GameRibbon">...</div>
+	
       
       {/* Adding Toast Component to the Render Tree */}
       {toastMsg && <Toast message={toastMsg} onClose={() => setToastMsg("")} />}
@@ -591,7 +598,7 @@ return (
 	>
 	  {showEventLog ? "Hide Event Log" : "Show Event Log"}
 	</button>
-	
+	 
  		     
      {showEventLog && (
       <div style={{ marginTop: "1rem" }}>
